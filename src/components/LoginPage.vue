@@ -38,40 +38,58 @@
 </template>
 
 <script>
-import { ref } from "vue";
+import { ref, inject } from "vue";
 import AuthService from "../services/AuthService";
 import { useRouter } from "vue-router";
 
 export default {
   setup() {
     const router = useRouter();
+    const isLoggedIn = inject('isLoggedIn');  // Nhận trạng thái đăng nhập từ App.vue
+    const globalUsername = inject('username');  // Nhận tên người dùng từ App.vue
+    const globalRole = inject('role');  // Nhận vai trò người dùng từ App.vue
+
     const username = ref("");
     const password = ref("");
     const loading = ref(false);
     const message = ref("");
 
     const handleLogin = () => {
-      loading.value = true;
-      message.value = "";
-      AuthService.login(username.value, password.value)
-        .then(() => {
-          const role = AuthService.getCurrentUserRole();
-          if (role === 0) {
-            router.push("/employee");
-          } else if (role === 1) {
-            router.push("/user");
-          }
-          window.location.reload();
-        })
-        .catch((error) => {
-          const resMessage =
-            (error.response && error.response.data && error.response.data.message) ||
-            error.message ||
-            error.toString();
-          message.value = resMessage;
-          loading.value = false;
-        });
-    };
+  loading.value = true;
+  message.value = "";
+  AuthService.login(username.value, password.value)
+    .then(() => {
+      const user = AuthService.getCurrentUser();
+      if (user) {
+        // Cập nhật trạng thái toàn cục
+        isLoggedIn.value = true;
+        globalUsername.value = user.username;
+        globalRole.value = AuthService.getCurrentUserRole();
+
+        // Lưu trạng thái vào localStorage
+        localStorage.setItem("isLoggedIn", true);
+        localStorage.setItem("username", user.username);
+        localStorage.setItem("role", globalRole.value);
+
+        // Điều hướng theo vai trò người dùng
+        if (globalRole.value === 0) {
+          router.push("/employee");
+        } else if (globalRole.value === 1) {
+          router.push("/user");
+        }
+      }
+      loading.value = false;
+    })
+    .catch((error) => {
+      const resMessage =
+        (error.response && error.response.data && error.response.data.message) ||
+        error.message ||
+        error.toString();
+      message.value = resMessage;
+      loading.value = false;
+    });
+};
+
 
     const styles = {
       container: {

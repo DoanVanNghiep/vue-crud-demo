@@ -1,13 +1,12 @@
 <template>
-  <div>
-    <h2 class="text-center">QUẢN LÝ SẢN PHẨM</h2>
-    <div class="row">
-      <button class="btn btn-primary" @click="addEmployee">Thêm sản phẩm</button>
+  <div class="container">
+    <h2 class="text-center mt-4">QUẢN LÝ SẢN PHẨM</h2>
+    <div class="row mb-3 text-right">
+      <button class="btn btn-success" @click="addEmployee">+ Thêm sản phẩm</button>
     </div>
-    <br />
     <div class="row">
-      <table class="table table-striped table-bordered">
-        <thead>
+      <table class="table table-hover table-bordered shadow-sm">
+        <thead class="thead-dark">
           <tr>
             <th>Mã sản phẩm</th>
             <th>Sản phẩm</th>
@@ -17,27 +16,28 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="employee in employees" :key="employee.empNo">
+          <tr v-for="employee in employees" :key="employee.empNo" class="table-row">
             <td>{{ employee.empNo }}</td>
             <td>{{ employee.empName }}</td>
             <td>{{ employee.quantity }}</td>
-            <td>{{ employee.price }}</td>
+            <td>{{ employee.price }} VND</td>
             <td>
-              <button @click="updateEmployee(employee.empNo)" class="btn btn-info">Sửa</button>
-              <button @click="confirmDeleteEmployee(employee.empNo)" class="btn btn-danger" style="margin-left: 10px">Xóa</button>
-              <button @click="viewEmployee(employee.empNo)" class="btn btn-info" style="margin-left: 10px">Chi tiết</button>
+              <button @click="updateEmployee(employee.empNo)" class="btn btn-info btn-sm">Sửa</button>
+              <button @click="confirmDeleteEmployee(employee.empNo)" class="btn btn-danger btn-sm ml-2">Xóa</button>
+              <button @click="viewEmployee(employee.empNo)" class="btn btn-primary btn-sm ml-2">Chi tiết</button>
             </td>
           </tr>
         </tbody>
       </table>
     </div>
 
+    <!-- Modal -->
     <div v-if="showModal" :style="modalOverlayStyle">
       <div :style="modalContentStyle">
         <h4>Bạn có chắc chắn muốn xóa sản phẩm này không?</h4>
-        <div>
+        <div class="mt-4">
           <button @click="deleteEmployee" class="btn btn-danger">Đồng ý</button>
-          <button @click="closeModal" class="btn btn-secondary" style="margin-left: 10px">Hủy</button>
+          <button @click="closeModal" class="btn btn-secondary ml-2">Hủy</button>
         </div>
       </div>
     </div>
@@ -103,7 +103,7 @@ export default {
       left: 0,
       right: 0,
       bottom: 0,
-      backgroundColor: "rgba(0,0,0,0.5)",
+      backgroundColor: "rgba(0, 0, 0, 0.6)",
       display: "flex",
       justifyContent: "center",
       alignItems: "center",
@@ -112,10 +112,12 @@ export default {
 
     const modalContentStyle = {
       backgroundColor: "#fff",
-      padding: "20px",
-      borderRadius: "5px",
+      padding: "30px",
+      borderRadius: "10px",
       textAlign: "center",
-      boxShadow: "0px 0px 10px rgba(0,0,0,0.25)",
+      boxShadow: "0px 0px 20px rgba(0,0,0,0.4)",
+      maxWidth: "400px",
+      width: "100%",
     };
 
     return {
@@ -136,7 +138,34 @@ export default {
 </script>
 
 <style scoped>
+.container {
+  max-width: 1200px;
+  margin: auto;
+  padding: 20px;
+}
+
 .table {
   margin-top: 20px;
+}
+
+.table-row:hover {
+  background-color: #f1f1f1;
+}
+
+thead {
+  background-color: #343a40;
+  color: white;
+}
+
+button {
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: rgb(94, 89, 89);
+}
+
+.ml-2 {
+  margin-left: 10px;
 }
 </style>

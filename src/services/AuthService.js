@@ -6,6 +6,7 @@ class AuthService {
   login(username, password) {
     return axios.post(API_URL + 'authenticate', { username, password }).then((response) => {
       if (response.data.token && response.data.user_id) {
+        localStorage.setItem("user", JSON.stringify(response.data)) // thêm vào localStorage 
         this.setCookie('user', JSON.stringify({
           token: response.data.token,
           user_id: response.data.user_id,
@@ -25,6 +26,7 @@ class AuthService {
     const cartKey = this.getCartKey();
     this.deleteCookie(cartKey);
     this.deleteCookie('user');
+    localStorage.removeItem("user"); // Xóa thông tin người dùng
   }
 
   getCurrentUser() {

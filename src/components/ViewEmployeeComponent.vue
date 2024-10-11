@@ -27,7 +27,6 @@
           <label>Giá</label>
           <div>{{ employee.price }}</div>
         </div>
-        <button class="btn btn-primary" @click="addToCart">Thêm vào Giỏ hàng</button>
       </div>
     </div>
   </div>
@@ -76,7 +75,6 @@ export default {
     const getPhotoUrl = (photoUrl) => {
       return `http://localhost:8081${photoUrl}`;
     };
-
     onMounted(() => {
       fetchEmployeeDetails();
     });
